@@ -8,11 +8,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.set("view engine", "ejs");
 
+// Initial Database
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
+// Random string generator for generating short urls
 function generateRandomString() {
   var text = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -22,14 +24,17 @@ function generateRandomString() {
   return text;
 }
 
+// GET the root directory
 app.get("/", (req, res) => {
   res.redirect('/urls');
 });
 
+// GET the json file of database
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+// GET the index page
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlDatabase,
@@ -38,6 +43,7 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+// GET the new input page
 app.get("/urls/new", (req, res) => {
   let templateVars = {
     username: req.cookies.username
@@ -45,6 +51,7 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
+// GET the redirection towards the actual site
 app.get("/u/:shortURL", (req, res) => {
   var longURL = urlDatabase[req.params.shortURL];
   if(longURL){
@@ -54,6 +61,7 @@ app.get("/u/:shortURL", (req, res) => {
   }
 });
 
+// GET the info on each shortened url
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
@@ -67,6 +75,7 @@ app.get("/urls/:id", (req, res) => {
   }
 });
 
+// POST the newly generated short url
 app.post("/urls", (req, res) => {
   var randomText = generateRandomString();
   urlDatabase[randomText] = req.body.longURL;
@@ -77,6 +86,7 @@ app.post("/urls", (req, res) => {
   }
 });
 
+// POST the updated short url
 app.post("/urls/:id", (req, res) => {
   if(req.body.longURL){
     urlDatabase[req.params.id] = req.body.longURL;
@@ -84,21 +94,25 @@ app.post("/urls/:id", (req, res) => {
   res.redirect(`/urls`);
 });
 
+// POST for value deletion
 app.post("/urls/:id/delete", (req, res) => {
   delete(urlDatabase[req.params.id]);
   res.redirect('/urls');
 });
 
+// POST the username into oookie for logging in
 app.post("/login", (req, res) => {
   res.cookie('username', req.body.username);
   res.redirect('/urls');
 });
 
+// POST the cookie clearance for logging out
 app.post("/logout", (req, res) => {
   res.clearCookie('username');
   res.redirect('/urls');
 });
 
+// For marking if the server ran
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
