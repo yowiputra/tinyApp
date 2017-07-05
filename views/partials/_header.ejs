@@ -1,5 +1,17 @@
-<h1>Your Short URLs</h1>
-<form action="/login" method="POST">
-  <input id="username" type="text" name="username">
-  <input type="submit" value="Submit">
-</form>
+<!DOCTYPE html>
+<p>
+  <h1>Your Short URLs</h1>
+  <% if (username){ %>
+    <p>Hello, <%=username%>!</p>
+    <form action="/logout" method="POST">
+      <input type="submit" value="Log Out">
+    </form>
+  <% } else { %>
+    <p>Hello, please log-in to use tinyApp!</p>
+    <form action="/login" method="POST">
+      <label for="username">Login ID:</label>
+      <input id="username" type="text" name="username">
+      <input type="submit" value="Log In">
+    </form>
+  <% } %>
+</p>
