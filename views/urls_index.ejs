@@ -9,11 +9,10 @@
   </header>
 
   <main>
-    <h1>TinyApp - Link Shortener</h1>
       <ul>
         <% for (var id in urls){ %>
           <li>
-            <a href= <%= urls[id]%>><%= id%></a>: <%= urls[id]%><br/>
+            <a href= http://localhost:8080/urls/<%= id%>><%= id%></a>: <%= urls[id]%><br/>
           </li>
         <% } %>
       </ul>
