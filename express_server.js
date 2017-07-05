@@ -34,8 +34,20 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  console.log("Hi");
   res.render("urls_new");
+});
+
+app.get("/urls/notfound", (req, res) => {
+  res.render("urls_notfound");
+});
+
+app.get("/u/:shortURL", (req, res) => {
+  var longURL = urlDatabase[req.params.shortURL];
+  if(longURL){
+    res.redirect(longURL);
+  } else {
+    res.redirect(`http://localhost:8080/urls/notfound`);
+  }
 });
 
 app.get("/urls/:id", (req, res) => {
@@ -43,12 +55,18 @@ app.get("/urls/:id", (req, res) => {
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id]
   };
-  res.render("urls_show", templateVars);
+  if(templateVars.longURL){
+    res.render("urls_show", templateVars);
+  } else {
+    res.redirect(`http://localhost:8080/urls/notfound`);
+  }
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // debug statement to see POST parameters
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  var randomText = generateRandomString();
+  urlDatabase[randomText] = req.body.longURL;
+  console.log(urlDatabase);
+  res.redirect(`http://localhost:8080/urls/${randomText}`);
 });
 
 app.listen(PORT, () => {
