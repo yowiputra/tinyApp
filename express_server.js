@@ -65,12 +65,23 @@ app.get("/urls/:id", (req, res) => {
 app.post("/urls", (req, res) => {
   var randomText = generateRandomString();
   urlDatabase[randomText] = req.body.longURL;
-  console.log(urlDatabase);
-  if(!req.body.longURL){
-    res.sendStatus(400);
-  } else {
+  if(req.body.longURL){
     res.redirect(`/urls/${randomText}`);
+  } else {
+    res.sendStatus(400);
   }
+});
+
+app.post("/urls/:id", (req, res) => {
+  if(req.body.longURL){
+    urlDatabase[req.params.id] = req.body.longURL;
+  }
+  res.redirect(`/urls/${req.params.id}`);
+});
+
+app.post("/urls/:id/delete", (req, res) => {
+  delete(urlDatabase[req.params.id]);
+  res.redirect('/urls');
 });
 
 app.listen(PORT, () => {

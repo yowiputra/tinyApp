@@ -7,16 +7,19 @@
   <header>
     <% include ./partials/_header %>
   </header>
-
   <main>
       <ul>
         <% for (var id in urls){ %>
           <li>
-            <a href= http://localhost:8080/u/<%= id%>><%= id%></a>: <%= urls[id]%><br/>
+            <a style="display: inline-block" href= /u/<%= id%>><%= id%></a> -> <%= urls[id]%>
+            <a href='/urls/<%= id%>'>Edit</a>
+            <form method="POST" action='/urls/<%= id%>/delete' style="display:inline-block">
+              <input type="submit" value="Delete">
+            </form>
+            <br/>
           </li>
         <% } %>
       </ul>
   </main>
-
 </body>
 </html>
