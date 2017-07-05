@@ -21,7 +21,7 @@ function generateRandomString() {
 }
 
 app.get("/", (req, res) => {
-  res.end("Hello!");
+  res.redirect('/urls');
 });
 
 app.get("/urls.json", (req, res) => {
@@ -46,7 +46,7 @@ app.get("/u/:shortURL", (req, res) => {
   if(longURL){
     res.redirect(longURL);
   } else {
-    res.redirect(`http://localhost:8080/urls/notfound`);
+    res.redirect(`/urls/notfound`);
   }
 });
 
@@ -58,7 +58,7 @@ app.get("/urls/:id", (req, res) => {
   if(templateVars.longURL){
     res.render("urls_show", templateVars);
   } else {
-    res.redirect(`http://localhost:8080/urls/notfound`);
+    res.redirect(`/urls/notfound`);
   }
 });
 
@@ -66,7 +66,7 @@ app.post("/urls", (req, res) => {
   var randomText = generateRandomString();
   urlDatabase[randomText] = req.body.longURL;
   console.log(urlDatabase);
-  res.redirect(`http://localhost:8080/urls/${randomText}`);
+  res.redirect(`/urls/${randomText}`);
 });
 
 app.listen(PORT, () => {
