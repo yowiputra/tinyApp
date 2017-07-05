@@ -46,7 +46,7 @@ app.get("/u/:shortURL", (req, res) => {
   if(longURL){
     res.redirect(longURL);
   } else {
-    res.redirect(`/urls/notfound`);
+    res.sendStatus(404);
   }
 });
 
@@ -58,7 +58,7 @@ app.get("/urls/:id", (req, res) => {
   if(templateVars.longURL){
     res.render("urls_show", templateVars);
   } else {
-    res.redirect(`/urls/notfound`);
+    res.sendStatus(404);
   }
 });
 
@@ -66,7 +66,11 @@ app.post("/urls", (req, res) => {
   var randomText = generateRandomString();
   urlDatabase[randomText] = req.body.longURL;
   console.log(urlDatabase);
-  res.redirect(`/urls/${randomText}`);
+  if(!req.body.longURL){
+    res.sendStatus(400);
+  } else {
+    res.redirect(`/urls/${randomText}`);
+  }
 });
 
 app.listen(PORT, () => {
