@@ -22,11 +22,15 @@ function generateRandomString() {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
-}
+};
 
 // GET the root directory
 app.get("/", (req, res) => {
-  res.redirect('/urls');
+  if(req.cookies.username){
+    res.redirect('/urls');
+  }else{
+    res.redirect('/login');
+  }
 });
 
 // GET the json file of database
@@ -36,28 +40,28 @@ app.get("/urls.json", (req, res) => {
 
 // GET the index page
 app.get("/urls", (req, res) => {
-  let templateVars = {
-    urls: urlDatabase,
-    username: req.cookies.username
-  };
-  res.render("urls_index", templateVars);
+  if(req.cookies.username){
+    let templateVars = {
+      urls: urlDatabase,
+      username: req.cookies.username
+    };
+    res.render("urls_index", templateVars);
+  }else{
+    res.sendStatus(401);
+  }
 });
 
 // GET the new input page
 app.get("/urls/new", (req, res) => {
-  let templateVars = {
-    username: req.cookies.username
-  };
-  res.render("urls_new", templateVars);
+  if(req.cookies.username){
+    let templateVars = {
+      username: req.cookies.username
+    };
+    res.render("urls_new", templateVars);
+  }else{
+    res.redirect('/login');
+  }
 });
-
-app.get("/urls/login", (req, res) => {
-  res.render("urls_login");
-});
-
-app.get("/urls/register", (req, res) => {
-  res.render("urls_register");
-})
 
 // GET the redirection towards the actual site
 app.get("/u/:shortURL", (req, res) => {
@@ -71,44 +75,76 @@ app.get("/u/:shortURL", (req, res) => {
 
 // GET the info on each shortened url
 app.get("/urls/:id", (req, res) => {
-  let templateVars = {
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
-    username: req.cookies.username
-  };
-  if(templateVars.longURL){
-    res.render("urls_show", templateVars);
-  } else {
+  if(req.cookies.username){
+    let templateVars = {
+      shortURL: req.params.id,
+      longURL: urlDatabase[req.params.id],
+      username: req.cookies.username
+    };
+    if(templateVars.longURL){
+      res.render("urls_show", templateVars);
+    } else {
+      res.sendStatus(404);
+    }
+  }else{
     res.sendStatus(404);
   }
 });
 
 // POST the newly generated short url
 app.post("/urls", (req, res) => {
-  var randomText = generateRandomString();
-  urlDatabase[randomText] = req.body.longURL;
-  if(req.body.longURL){
-    res.redirect(`/urls/${randomText}`);
-  } else {
-    res.sendStatus(400);
+  if(req.cookies.username){
+    var randomText = generateRandomString();
+    urlDatabase[randomText] = req.body.longURL;
+    if(req.body.longURL){
+      res.redirect(`/urls/${randomText}`);
+    } else {
+      res.sendStatus(400);
+    }
+  }else{
+    res.sendStatus(401);
   }
 });
 
 // POST the updated short url
 app.post("/urls/:id", (req, res) => {
-  if(req.body.longURL){
-    urlDatabase[req.params.id] = req.body.longURL;
+  if(req.cookies.username){
+    if(req.body.longURL){
+      urlDatabase[req.params.id] = req.body.longURL;
+    }
+    res.redirect(`/urls`);
+  }else{
+    res.sendStatus(401);
   }
-  res.redirect(`/urls`);
 });
 
 // POST for value deletion
 app.post("/urls/:id/delete", (req, res) => {
-  delete(urlDatabase[req.params.id]);
-  res.redirect('/urls');
+  if(req.cookies.username){
+    delete(urlDatabase[req.params.id]);
+    res.redirect('/urls');
+  }else{
+    res.sendStatus(401);
+  }
 });
 
-// POST the username into oookie for logging in
+app.get("/login", (req, res) => {
+  if(req.cookies.username){
+    res.redirect('/urls');
+  }else{
+    res.render("urls_login");
+  }
+});
+
+app.get("/register", (req, res) => {
+  if(req.cookies.username){
+    res.redirect('/urls');
+  }else{
+    res.render("urls_register");
+  }
+});
+
+// POST the username into cookie for logging in
 app.post("/login", (req, res) => {
   res.cookie('username', req.body.username);
   res.redirect('/urls');
@@ -117,7 +153,7 @@ app.post("/login", (req, res) => {
 // POST the cookie clearance for logging out
 app.post("/logout", (req, res) => {
   res.clearCookie('username');
-  res.redirect('/urls');
+  res.redirect('/login');
 });
 
 // For marking if the server ran

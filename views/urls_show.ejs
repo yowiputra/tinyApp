@@ -8,11 +8,12 @@
     <% include ./partials/_header%>
   </header>
   <main>
-    <h2>shortURL: <b><%=shortURL%></b>
+    <h2>shortURL: <b><%=shortURL%></b></h2>
     <form method = "POST" action = '/urls/<%=shortURL%>'>
       <input id="longURL" type="text" name="longURL" placeholder='<%=longURL%>' style="width: 300px">
       <input type="submit" value="Update">
-    </form>
+    </form></br>
+    <a href='/urls'>Back to Index</a>
   </main>
 </body>
 </html>
