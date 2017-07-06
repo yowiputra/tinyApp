@@ -1,12 +1,15 @@
-var express = require("express");
-var app = express();
-var PORT = process.env.PORT || 8080; // default port 8080
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser');
+const cookieSession  = require('cookie-session');
 const bcrypt = require('bcrypt');
 
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
+app.use(cookieSession({
+  secret: 'getschwifty',
+  maxAge: 24 * 60 * 60 * 1000
+}));
 app.set("view engine", "ejs");
 
 // Initial URL Database
@@ -45,7 +48,7 @@ function generateRandomString() {
 
 // GET the root directory
 app.get("/", (req, res) => {
-  if(req.cookies.user_id){
+  if(req.session.user_id){
     res.redirect('/urls');
   }else{
     res.redirect('/login');
@@ -54,8 +57,8 @@ app.get("/", (req, res) => {
 
 // GET the index page
 app.get("/urls", (req, res) => {
-  const userObj = req.cookies.user_id;
-  if(req.cookies.user_id){
+  const userObj = req.session.user_id;
+  if(!!userObj){
     let templateVars = {
       urls: urlDatabase[userObj.id],
       user: userObj
@@ -68,8 +71,8 @@ app.get("/urls", (req, res) => {
 
 // GET the new input page
 app.get("/urls/new", (req, res) => {
-  const userObj = req.cookies.user_id;
-  if(userObj){
+  const userObj = req.session.user_id;
+  if(!!userObj){
     let templateVars = {
       user: userObj
     };
@@ -94,8 +97,8 @@ app.get("/u/:shortURL", (req, res) => {
 
 // GET the info on each shortened url
 app.get("/urls/:id", (req, res) => {
-  const userObj = req.cookies.user_id;
-  if(userObj){
+  const userObj = req.session.user_id;
+  if(!!userObj){
     let templateVars = {
       shortURL: req.params.id,
       longURL: urlDatabase[userObj.id][req.params.id],
@@ -114,8 +117,8 @@ app.get("/urls/:id", (req, res) => {
 
 // POST the newly generated short url
 app.post("/urls", (req, res) => {
-  const userObj = req.cookies.user_id;
-  if(userObj){
+  const userObj = req.session.user_id;
+  if(!!userObj){
     const randomText = generateRandomString();
     if(req.body.longURL){
       urlDatabase[userObj.id][randomText] = req.body.longURL;
@@ -130,8 +133,8 @@ app.post("/urls", (req, res) => {
 
 // POST the updated short url
 app.post("/urls/:id", (req, res) => {
-  const userObj = req.cookies.user_id;
-  if(userObj){
+  const userObj = req.session.user_id;
+  if(!!userObj){
     if(req.body.longURL){
       urlDatabase[userObj.id][req.params.id] = req.body.longURL;
     }
@@ -143,8 +146,8 @@ app.post("/urls/:id", (req, res) => {
 
 // POST for value deletion
 app.post("/urls/:id/delete", (req, res) => {
-  const userObj = req.cookies.user_id;
-  if(userObj){
+  const userObj = req.session.user_id;
+  if(!!userObj){
     delete(urlDatabase[userObj.id][req.params.id]);
     res.redirect('/urls');
   }else{
@@ -153,7 +156,7 @@ app.post("/urls/:id/delete", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  if(req.cookies.user_id){
+  if(!!req.session.user_id){
     res.redirect('/urls');
   }else{
     res.render("urls_login");
@@ -161,7 +164,7 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  if(req.cookies.user_id){
+  if(!!req.session.user_id){
     res.redirect('/urls');
   }else{
     res.render("urls_register");
@@ -174,7 +177,7 @@ app.post("/login", (req, res) => {
   const hashedPassword = bcrypt.hashSync(password, 14);
   for(const id in users){
     if(email === users[id].email && bcrypt.compareSync(password, hashedPassword)){
-      res.cookie('user_id', users[id]);
+      req.session.user_id = users[id];
       res.redirect('/urls');
     }
   }
@@ -197,9 +200,8 @@ app.post("/register", (req, res) => {
       email: email,
       password: bcrypt.hashSync(password, 14)
     };
-    console.log(users[user_id]);
     urlDatabase[user_id] = {};
-    res.cookie('user_id', users[user_id]);
+    req.session.user_id = users[user_id];
     res.redirect('/urls');
   } else {
     res.sendStatus(400);
@@ -208,7 +210,7 @@ app.post("/register", (req, res) => {
 
 // POST the cookie clearance for logging out
 app.post("/logout", (req, res) => {
-  res.clearCookie('user_id');
+  req.session = null;
   res.redirect('/login');
 });
 
