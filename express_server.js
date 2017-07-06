@@ -51,6 +51,14 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
+app.get("/urls/login", (req, res) => {
+  res.render("urls_login");
+});
+
+app.get("/urls/register", (req, res) => {
+  res.render("urls_register");
+})
+
 // GET the redirection towards the actual site
 app.get("/u/:shortURL", (req, res) => {
   var longURL = urlDatabase[req.params.shortURL];

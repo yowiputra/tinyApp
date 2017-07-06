@@ -7,11 +7,7 @@
       <input type="submit" value="Log Out">
     </form>
   <% } else { %>
-    <p>Hello, please log-in to use tinyApp!</p>
-    <form action="/login" method="POST">
-      <label for="username">Login ID:</label>
-      <input id="username" type="text" name="username">
-      <input type="submit" value="Log In">
-    </form>
+    <a href='/urls/login'>Log In</a></br>
+    <a href='/urls/register'>Sign Up</a>
   <% } %>
 </p>
