@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <p>
   <h1>Your Short URLs</h1>
-  <% if (username){ %>
-    <p>Hello, <%=username%>!</p>
+  <% if (user){ %>
+    <p>Hello, <%=user.id%>!</p>
     <form action="/logout" method="POST">
       <input type="submit" value="Log Out">
     </form>
