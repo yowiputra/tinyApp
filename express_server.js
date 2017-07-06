@@ -13,28 +13,10 @@ app.use(cookieSession({
 app.set("view engine", "ejs");
 
 // Initial URL Database
-const urlDatabase = {
-  "userRandomID":{
-    abcdef: "http://www.lighthouselabs.ca"
-  },
-  "user2RandomID":{
-    asdfgh: "http://www.google.com"
-  }
-};
+const urlDatabase = {};
 
 // Initial User Database
-const users = {
-  "userRandomID": {
-    id: "userRandomID",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
-  },
- "user2RandomID": {
-    id: "user2RandomID",
-    email: "user2@example.com",
-    password: "dishwasher-funk"
-  }
-}
+const users = {};
 
 // Random string generator for generating short urls
 function generateRandomString() {
@@ -156,18 +138,20 @@ app.post("/urls/:id/delete", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  if(!!req.session.user_id){
+  const userObj = req.session.user_id;
+  if(!!userObj){
     res.redirect('/urls');
   }else{
-    res.render("urls_login");
+    res.render("urls_login", {user: userObj});
   }
 });
 
 app.get("/register", (req, res) => {
-  if(!!req.session.user_id){
+  const userObj = req.session.user_id;
+  if(!!userObj){
     res.redirect('/urls');
   }else{
-    res.render("urls_register");
+    res.render("urls_register", {user: userObj});
   }
 });
 
