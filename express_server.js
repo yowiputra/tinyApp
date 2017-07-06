@@ -8,11 +8,25 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.set("view engine", "ejs");
 
-// Initial Database
-var urlDatabase = {
+// Initial URL Database
+const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
+// Initial User Database
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+}
 
 // Random string generator for generating short urls
 function generateRandomString() {
@@ -149,6 +163,26 @@ app.post("/login", (req, res) => {
   res.cookie('username', req.body.username);
   res.redirect('/urls');
 });
+
+app.post("/register", (req, res) => {
+  for(const id in users){
+    if(req.body.email === users[id].email){
+      res.sendStatus(400);
+    }
+  }
+  if(!!req.body.email && !!req.body.password){
+    var user_id = generateRandomString();
+    users[user_id] = {
+      id: user_id,
+      email: req.body.email,
+      password: req.body.password
+    };
+    res.cookie('username', user_id);
+    res.redirect('/urls');
+  } else {
+    res.sendStatus(400);
+  }
+})
 
 // POST the cookie clearance for logging out
 app.post("/logout", (req, res) => {
