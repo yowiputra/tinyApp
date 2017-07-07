@@ -137,6 +137,7 @@ app.post("/urls/:id/delete", (req, res) => {
   }
 });
 
+// GET the login page
 app.get("/login", (req, res) => {
   const userObj = req.session.user_id;
   if(!!userObj){
@@ -146,6 +147,7 @@ app.get("/login", (req, res) => {
   }
 });
 
+// GET the register page
 app.get("/register", (req, res) => {
   const userObj = req.session.user_id;
   if(!!userObj){
@@ -172,11 +174,13 @@ app.post("/login", (req, res) => {
 // initialize user data and url database for the new user
 app.post("/register", (req, res) => {
   const {email, password} = req.body;
+  // check if email already exists
   for(const id in users){
     if(email === users[id].email){
       res.sendStatus(400);
     }
   }
+  // do its functionality if user inputted anything other than blank
   if(!!email && !!password){
     const user_id = generateRandomString();
     users[user_id] = {
