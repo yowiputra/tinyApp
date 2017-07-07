@@ -20,9 +20,9 @@ const users = {};
 
 // Random string generator for generating short urls
 function generateRandomString() {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (var i = 0; i < 6; i++) {
+  const text = "";
+  const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (let i = 0; i < 6; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
@@ -66,8 +66,8 @@ app.get("/urls/new", (req, res) => {
 
 // GET the redirection towards the actual site
 app.get("/u/:shortURL", (req, res) => {
-  for(var userID in users){
-    for(var shortURL in urlDatabase[userID]){
+  for(let userID in users){
+    for(let shortURL in urlDatabase[userID]){
       if (shortURL === req.params.shortURL){
         const longURL = urlDatabase[userID][shortURL];
         res.redirect(longURL);
