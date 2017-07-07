@@ -1,13 +1,46 @@
 <!DOCTYPE html>
-<p>
-  <h1>tinyApp</h1>
-  <% if (user){ %>
-    <p>Hello, <%=user.id%>!</p>
-    <form action="/logout" method="POST">
-      <input type="submit" value="Log Out">
-    </form>
-  <% } else { %>
-    <a href='/login'>Log In</a></br>
-    <a href='/register'>Sign Up</a>
-  <% } %>
-</p>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tinyApp - header</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+    .bs-example{
+    	margin: 20px;
+    }
+    .inline-block {
+    display: inline-block
+}
+</style>
+</head>
+<body>
+<div class="bs-example">
+    <div class="page-header">
+      <center>
+        <h1>tinyApp! <small>for when you gotta shorten that URL...</small></h1>
+      </center>
+      <% if (user){ %>
+        <center>
+          <div class="inline-block">
+            <h4>Hello, <%=user.id%>!</h4>
+          </div>
+          <div class="inline-block">
+            <form action="/logout" method="POST">
+              <input type="submit" value="Log Out" class="btn btn-danger">
+            </form>
+          </div>
+        </center>
+      <% } else { %>
+        <center>
+          <a href='/login' class="btn btn-primary">Log In</a>
+          <a href='/register' class="btn btn-primary">Sign Up</a>
+        </center>
+      <% } %>
+    </div>
+</div>
+</body>
+</html>

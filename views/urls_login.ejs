@@ -1,18 +1,61 @@
+<!DOCTYPE html>
 <html lang="en">
-  <head></head>
-  <body style="font-size:20px; padding:50px;">
-    <header>
-      <% include ./partials/_header%>
-    </header>
-    <main>
-      <p>Hello, please log-in to use tinyApp!</p>
-      <form action="/login" method="POST", style="margin:150px;">
-        <label for="email">Email: </label>
-        <input id="email" type="email" name="email", style="width: 300px"></br>
-        <label for="password">Password: </label>
-        <input id="password" type="password" name="password", style="width: 300px"></br>
-        <input type="submit" value="Log-in" />
-      </form>
-    </main>
-  </body>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log-in to tinyApp!</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+    .bs-example{
+    	margin: 20px;
+    }
+	/* Fix alignment issue of label on extra small devices in Bootstrap 3.2 */
+    .form-horizontal .control-label{
+        padding-top: 7px;
+    }
+    .jumbotron{
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+</style>
+</head>
+<body>
+  <header>
+    <% include ./partials/_header%>
+  </header>
+  <div class="bs-example">
+    <center>
+      <h3>Log-in to use tinyApp!</h3>
+    </center>
+    <div class="container">
+      <div class="row">
+      	<div class="center">
+        	<div class="jumbotron">
+            <form action="/login" method="POST" class="form-horizontal">
+                <div class="form-group">
+                    <label for="email" class="control-label col-xs-2">Email</label>
+                    <div class="col-xs-10">
+                        <input id="email" type="email" class="form-control" name="email" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="control-label col-xs-2">Password</label>
+                    <div class="col-xs-10">
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-offset-2 col-xs-10">
+                        <input type="submit" value="Log-in">
+                    </div>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
+  </div>
+</body>
 </html>
