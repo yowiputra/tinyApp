@@ -1,26 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>TinyApp</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tinyApp!</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style type="text/css">
+      .bs-example{
+      	margin: 20px;
+      }
+  	/* Fix alignment issue of label on extra small devices in Bootstrap 3.2 */
+      .form-horizontal .control-label{
+          padding-top: 7px;
+      }
+      .jumbotron{
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+      .table{
+        margin-top: : 15px;
+      }
+      .container{
+          max-width: 970px;
+      }
+  </style>
 </head>
 <body>
   <header>
-    <% include ./partials/_header %>
+    <% include ./partials/_header%>
   </header>
-  <main>
-    <a href='/urls/new'>Add new URL</a>
-      <ul>
-        <% for (var id in urls){ %>
-          <li>
-            <a style="display: inline-block" href= /u/<%= id%>><%= id%></a> -> <%= urls[id]%>
-            <a href='/urls/<%= id%>'>Edit</a>
-            <form method="POST" action='/urls/<%= id%>/delete' style="display:inline-block">
-              <input type="submit" value="Delete">
-            </form>
-            <br/>
-          </li>
-        <% } %>
-      </ul>
-  </main>
+  <div class="bs-example">
+    <div class="container">
+      <div class="row">
+      	<div class="center">
+          <center>
+            <a href='/urls/new' class="btn btn-primary">Add new URL</a>
+          </center>
+        	<div class="jumbotron">
+            <table class="table">
+              <thead>
+                <tr>
+                    <th>Long URL</th>
+                    <th>Shortened URL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (var id in urls){ %>
+                  <tr>
+                    <td>
+                      <%= urls[id]%>
+                    </td>
+                    <td>
+                      <a href= /u/<%= id%>><%= id%></a>
+                    </td>
+                    <td>
+                      <a href='/urls/<%= id%>' class="btn btn-primary" style="display:inline-block">Edit</a>
+                    </td>
+                    <td>
+                      <form method="POST" action='/urls/<%= id%>/delete' style="display:inline-block">
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                      </form>
+                    </td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+  </div>
 </body>
 </html>

@@ -86,7 +86,6 @@ app.get("/urls/:id", (req, res) => {
       longURL: urlDatabase[userObj.id][req.params.id],
       user: userObj
     };
-    console.log(templateVars);
     if(templateVars.longURL){
       res.render("urls_show", templateVars);
     } else {
@@ -104,6 +103,7 @@ app.post("/urls", (req, res) => {
     const randomText = generateRandomString();
     if(req.body.longURL){
       urlDatabase[userObj.id][randomText] = req.body.longURL;
+      console.log(urlDatabase);
       res.redirect(`/urls/${randomText}`);
     } else {
       res.sendStatus(400);

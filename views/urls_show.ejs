@@ -1,19 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>TinyApp</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tinyApp! Details for <%=shortURL%></title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style type="text/css">
+      .bs-example{
+      	margin: 20px;
+      }
+      .jumbotron{
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+  </style>
 </head>
 <body>
   <header>
     <% include ./partials/_header%>
   </header>
-  <main>
-    <h2>shortURL: <b><%=shortURL%></b></h2>
-    <form method = "POST" action = '/urls/<%=shortURL%>'>
-      <input id="longURL" type="text" name="longURL" placeholder='<%=longURL%>' style="width: 300px">
-      <input type="submit" value="Update">
-    </form></br>
-    <a href='/urls'>Back to Index</a>
-  </main>
+  <div class="bs-example">
+    <div class="container">
+      <div class="row">
+      	<div class="center">
+        	<div class="jumbotron">
+            <center>
+              <h3>Short URL: <b><%=shortURL%></b></h3>
+              <h4>Long URL: <b><%=longURL%></b></h4>
+              <form method = "POST" action = '/urls/<%=shortURL%>'>
+                <div class="input-group">
+                  <input id="longURL" type="text" name="longURL" placeholder='<%=longURL%>' class="form-control">
+                  <span class="input-group-btn">
+                    <input type="submit" value="Update" class="btn btn-primary">
+                  </span>
+                </div>
+              </form></br>
+              <a href='/urls' class="btn btn-primary">Back to Index</a>
+            </center>
+          </div>
+        </div>
+    </div>
+  </div>
 </body>
 </html>

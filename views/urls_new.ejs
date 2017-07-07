@@ -1,11 +1,55 @@
+<!DOCTYPE html>
 <html lang="en">
-  <head></head>
-  <body style="font-size:20px; padding:50px;">
-    <% include partials/_header %>
-    <form action="/urls" method="POST" style="margin:150px;">
-      <label for="longURL">Enter a URL:</label>
-      <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
-      <input type="submit" value="Submit">
-    </form>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tinyApp! Create new short URL</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style type="text/css">
+      .bs-example{
+      	margin: 20px;
+      }
+  	/* Fix alignment issue of label on extra small devices in Bootstrap 3.2 */
+      .form-horizontal .control-label{
+          padding-top: 7px;
+      }
+      .jumbotron{
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+  </style>
+</head>
+<body>
+  <header>
+    <% include ./partials/_header%>
+  </header>
+  <div class="bs-example">
+    <center>
+      <h3>Shorten that URL!</h3>
+    </center>
+    <div class="container">
+      <div class="row">
+      	<div class="center">
+        	<div class="jumbotron">
+            <form action="/urls" method="POST" class="form-horizontal">
+                <div class="form-group">
+                  <label for="longURL" class="control-label col-xs-2">Enter a URL:</label>
+                  <div class="col-xs-10">
+                      <input id="longURL" type="text" class="form-control" name="longURL" placeholder="http://">
+                  </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-offset-2 col-xs-10">
+                        <input type="submit" value="Submit" style:"display: inline-block">
+                    </div>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
+  </div>
+</body>
 </html>
