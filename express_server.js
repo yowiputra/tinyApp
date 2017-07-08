@@ -25,6 +25,17 @@ function generateRandomString() {
   return text;
 };
 
+// check if logged-in user owns the shortURL
+function userOwns(db, user, shortURL) {
+  let result = false;
+  for (let key in db) {
+    if (db[user.id][shortURL]) {
+      result = true;
+    }
+  }
+  return result;
+}
+
 // Initial URL Database
 const urlDatabase = {};
 
@@ -87,8 +98,12 @@ app.get("/urls/:id", (req, res) => {
     res.sendStatus(404);
     return;
   }
-  if(!urlDatabase[userObj.id][req.params.id]){
+  if (!urlDatabase[userObj.id][req.params.id]) {
     res.sendStatus(404);
+    return;
+  }
+  if (!userOwns(urlDatabase, userObj, req.params.id)) {
+    res.sendStatus(401);
     return;
   }
   let templateVars = {
@@ -102,11 +117,12 @@ app.get("/urls/:id", (req, res) => {
 // POST the newly generated short url
 app.post("/urls", (req, res) => {
   const userObj = req.session.user;
+  console.log(userObj);
   if (!userObj) {
     res.sendStatus(401);
     return;
   }
-  if(!req.body.longURL){
+  if (!req.body.longURL){
     res.sendStatus(400);
     return;
   }
@@ -119,13 +135,18 @@ app.post("/urls", (req, res) => {
 // POST the updated short url
 app.post("/urls/:id", (req, res) => {
   const userObj = req.session.user;
+  if (!req.body.longURL) {
+    res.sendStatus(400);
+  }
   if (!userObj) {
     res.sendStatus(401);
     return;
   }
-  if (req.body.longURL) {
-    urlDatabase[userObj.id][req.params.id] = req.body.longURL;
+  if (!userOwns(urlDatabase, userObj, req.params.id)) {
+    res.sendStatus(401);
+    return;
   }
+  urlDatabase[userObj.id][req.params.id] = req.body.longURL;
   res.redirect(`/urls`);
 });
 
@@ -197,12 +218,13 @@ app.post("/register", (req, res) => {
     };
     urlDatabase[user_id] = {};
     req.session.user = users[user_id];
+    console.log(req.session.user);
     res.redirect('/urls');
   } else {
     res.sendStatus(400);
     return;
   }
-})
+});
 
 // POST the cookie clearance for logging out
 app.post("/logout", (req, res) => {
